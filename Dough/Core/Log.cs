@@ -12,17 +12,23 @@ namespace Dough.Core
         private static Logger engineLogger;
         private static Logger appLogger;
         
+        private static FileTarget logFile;
+        private static ColoredConsoleTarget logConsole;
+        
+        [ConfigValue("LogEnabled", ConfigFiles.EngineCore)]
+        private static bool _logEnabled = true;
+        
         public static void Init(string appName = "App")
         {
             var logConfig = new LoggingConfiguration();
             
-            var logFile = new FileTarget("logFile")
+            logFile = new FileTarget("logFile")
             {
                 FileName = "Logs/log.txt",
                 Encoding = Encoding.UTF8,
                 ArchiveOldFileOnStartup = true,
             };
-            var logConsole = new ColoredConsoleTarget("logConsole")
+            logConsole = new ColoredConsoleTarget("logConsole")
             {
                 Encoding = Encoding.UTF8
             };
@@ -34,11 +40,28 @@ namespace Dough.Core
             logConfig.AddRule(LogLevel.Debug, LogLevel.Fatal, logFile);
 
             LogManager.Configuration = logConfig;
-
+            
             engineLogger = LogManager.Setup().GetLogger("Dough");
             appLogger = LogManager.Setup().GetLogger(appName);
             
             EngineInfo("Initialised log!");
+        }
+
+        public static void Configure()
+        {
+            // This is a bit of a hack. Since we have to init the logger before the config system to
+            // allow the config system to log (which I believe is more important), we have to configure
+            // based on configvalues after we have already called Log.Init(). 
+            // For now, the solution is just this Reconfigure function which is called directly after
+            // the config systems initialisation, however there are a couple other things we could do instead:
+            // 1. Not have config for the log. As long as we're not opening a console for distribution builds, it's fine.
+            // 2. Have the log manage its own config. Could still just use Tomlet, serialise a "LogConfig" class. ez.
+            if (!_logEnabled)
+            {
+                // If log is disabled, just null loggers.
+                engineLogger = LogManager.CreateNullLogger();
+                appLogger = LogManager.CreateNullLogger();
+            }
         }
 
         public static void Shutdown()

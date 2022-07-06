@@ -10,6 +10,11 @@ using Tomlet.Models;
 
 namespace Dough.Core;
 
+public static class ConfigFiles
+{
+    public const string EngineCore = "EngineCore.cfg";
+}
+
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 class ConfigValue : Attribute
 {

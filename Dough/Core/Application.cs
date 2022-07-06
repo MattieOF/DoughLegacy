@@ -17,6 +17,7 @@ namespace Dough.Core
             Environment.CurrentDirectory = Specification.workingDirectory;
             Log.Init(Specification.appName);
             ConfigManager.InitConfig();
+            Log.Configure();
         }
 
         public bool Run()
