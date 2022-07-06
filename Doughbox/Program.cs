@@ -7,10 +7,8 @@ namespace Doughbox
     {
         public static void Main(string[] args)
         {
-            Engine.Init();
-            using (var app = new DoughboxApp())
+            using (var app = new DoughboxApp(new ApplicationSpecification("Doughbox", args)))
                 app.Run();
-            Engine.Shutdown();
         }
     }
 }

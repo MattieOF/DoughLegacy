@@ -47,7 +47,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Core\Application.cs" />
-        <Compile Include="Core\Engine.cs" />
         <Compile Include="Core\Log.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

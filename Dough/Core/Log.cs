@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using NLog;
 using NLog.Conditions;
 using NLog.Config;
@@ -6,16 +7,20 @@ using NLog.Targets;
 
 namespace Dough.Core
 {
-    public class Log
+    public static class Log
     {
-        public static void Init()
+        private static Logger engineLogger;
+        private static Logger appLogger;
+        
+        public static void Init(string appName = "App")
         {
             var logConfig = new LoggingConfiguration();
             
             var logFile = new FileTarget("logFile")
             {
-                FileName = "log.txt",
-                Encoding = Encoding.UTF8
+                FileName = "Logs/log.txt",
+                Encoding = Encoding.UTF8,
+                ArchiveOldFileOnStartup = true,
             };
             var logConsole = new ColoredConsoleTarget("logConsole")
             {
@@ -29,15 +34,28 @@ namespace Dough.Core
             logConfig.AddRule(LogLevel.Debug, LogLevel.Fatal, logFile);
 
             LogManager.Configuration = logConfig;
+
+            engineLogger = LogManager.Setup().GetLogger("Dough");
+            appLogger = LogManager.Setup().GetLogger(appName);
             
-            LogManager.GetCurrentClassLogger().Info("Hello!");
-            LogManager.GetCurrentClassLogger().Warn("uh oh");
-            LogManager.GetCurrentClassLogger().Fatal("fuck");
+            EngineInfo("Initialised log!");
         }
 
         public static void Shutdown()
         {
             LogManager.Shutdown();
         }
+
+        public static void Trace(string msg) => appLogger.Trace(msg);
+        public static void Info(string msg) => appLogger.Info(msg);
+        public static void Warn(string msg) => appLogger.Warn(msg);
+        public static void Error(string msg) => appLogger.Error(msg);
+        public static void Fatal(string msg) => appLogger.Fatal(msg);
+        
+        internal static void EngineTrace(string msg) => engineLogger.Trace(msg);
+        internal static void EngineInfo(string msg) => engineLogger.Info(msg);
+        internal static void EngineWarn(string msg) => engineLogger.Warn(msg);
+        internal static void EngineError(string msg) => engineLogger.Error(msg);
+        internal static void EngineFatal(string msg) => engineLogger.Fatal(msg);
     }
 }

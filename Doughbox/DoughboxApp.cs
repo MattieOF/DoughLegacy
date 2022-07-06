@@ -5,10 +5,10 @@ namespace Doughbox
 {
     public class DoughboxApp : Application
     {
-        public DoughboxApp()
-            : base()
+        public DoughboxApp(ApplicationSpecification specification)
+            : base(specification)
         {
-            Console.WriteLine("I am sentient.");
+            Log.Info("I am sentient.");
         }
     }
 }
