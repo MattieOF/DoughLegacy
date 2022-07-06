@@ -66,7 +66,7 @@ public class ConfigManager
     // Key is the filename of the config file (including ext), value is the TomlDoc representation
     private static readonly Dictionary<string, TomlDocument> ConfigFiles = new();
     // Root directory of config files. 
-    private static string _configDirectory;
+    private static string _configDirectory = string.Empty;
 
     /// <summary>
     /// Loads config files from the directory provided as an argument to <see cref="InitConfig(string)"/>
