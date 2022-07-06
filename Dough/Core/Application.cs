@@ -6,7 +6,7 @@ namespace Dough.Core
     {
         public Application()
         {
-
+            
         }
 
         public void Run()

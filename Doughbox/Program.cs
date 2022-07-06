@@ -1,4 +1,5 @@
 ﻿using System;
+using Dough.Core;
 
 namespace Doughbox
 {
@@ -6,9 +7,10 @@ namespace Doughbox
     {
         public static void Main(string[] args)
         {
-            DoughboxApp app = new DoughboxApp();
-            app.Run();
-            app.Dispose();
+            Engine.Init();
+            using (var app = new DoughboxApp())
+                app.Run();
+            Engine.Shutdown();
         }
     }
 }
