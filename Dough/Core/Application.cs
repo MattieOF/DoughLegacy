@@ -19,9 +19,9 @@ namespace Dough.Core
             Log.Init(Specification.appName);
         }
 
-        public void Run()
+        public bool Run()
         {
-            
+            return true;
         }
         
         public void Dispose()

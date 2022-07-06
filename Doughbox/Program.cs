@@ -7,8 +7,11 @@ namespace Doughbox
     {
         public static void Main(string[] args)
         {
-            using (var app = new DoughboxApp(new ApplicationSpecification("Doughbox", args)))
-                app.Run();
+            bool completed = false;
+            
+            while (!completed)
+                using (var app = new DoughboxApp(new ApplicationSpecification("Doughbox", args)))
+                    completed = app.Run();
         }
     }
 }
