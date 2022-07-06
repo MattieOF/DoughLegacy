@@ -92,8 +92,8 @@ public class ConfigManager
             } 
             catch (Exception e)
             {
-                Console.WriteLine("Failed to create directory for config files!");
-                Console.WriteLine(e.Message);
+                Log.EngineFatal("Failed to create directory for config files!");
+                Log.EngineFatal(e.Message);
                 return;
             }
         }
@@ -158,13 +158,13 @@ public class ConfigManager
                 {
                     if (configValue.Default != null && configValue.Default.GetType() != info.FieldType)
                     {
-                        Console.WriteLine("Error: Field type and default value type do not match!");
+                        Log.EngineError($"Error: Field type and default value type do not match! Field \"{info.Name}\" in type \"{type.Name}\"");
                         continue;
                     }
 
                     if (!info.IsStatic)
                     {
-                        Console.WriteLine("Error: Field must be static!");
+                        Log.EngineError($"Error: Field must be static! Field \"{info.Name}\" in type \"{type.Name}\"");
                         continue;
                     }
 
@@ -201,13 +201,13 @@ public class ConfigManager
                 {
                     if (configValue.Default != null && configValue.Default.GetType() != info.PropertyType)
                     {
-                        Console.WriteLine("Error: Property type and default value type do not match!");
+                        Log.EngineError($"Error: Property type and default value type do not match! Property \"{info.Name}\" in type \"{type.Name}\"");
                         continue;
                     }
 
                     if (!info.GetGetMethod()!.IsStatic)
                     {
-                        Console.WriteLine("Error: Property must be static!");
+                        Log.EngineError("Error: Property must be static! Property \"{info.Name}\" in type \"{type.Name}\"");
                         continue;
                     }
 
@@ -236,7 +236,7 @@ public class ConfigManager
         SaveConfigFiles();
 
         timer.Stop();
-        Console.WriteLine($"Took {timer.ElapsedMilliseconds}ms to load config");
+        Log.EngineInfo($"Took {timer.ElapsedMilliseconds}ms to load config");
     }
 
     /// <summary>
