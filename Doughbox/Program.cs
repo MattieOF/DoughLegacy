@@ -6,7 +6,9 @@ namespace Doughbox
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Doughbox!");
+            DoughboxApp app = new DoughboxApp();
+            app.Run();
+            app.Dispose();
         }
     }
 }
