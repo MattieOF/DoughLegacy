@@ -9,11 +9,11 @@ namespace Dough.Core
 {
     public static class Log
     {
-        private static Logger engineLogger;
-        private static Logger appLogger;
+        private static Logger _engineLogger;
+        private static Logger _appLogger;
         
-        private static FileTarget logFile;
-        private static ColoredConsoleTarget logConsole;
+        private static FileTarget _logFile;
+        private static ColoredConsoleTarget _logConsole;
         
         [ConfigValue("LogEnabled", ConfigFiles.EngineCore)]
         private static bool _logEnabled = true;
@@ -22,27 +22,27 @@ namespace Dough.Core
         {
             var logConfig = new LoggingConfiguration();
             
-            logFile = new FileTarget("logFile")
+            _logFile = new FileTarget("logFile")
             {
                 FileName = "Logs/log.txt",
                 Encoding = Encoding.UTF8,
                 ArchiveOldFileOnStartup = true,
             };
-            logConsole = new ColoredConsoleTarget("logConsole")
+            _logConsole = new ColoredConsoleTarget("logConsole")
             {
                 Encoding = Encoding.UTF8
             };
-            logConsole.RowHighlightingRules.Add(new ConsoleRowHighlightingRule(ConditionParser.ParseExpression("level == LogLevel.Warn"), ConsoleOutputColor.Yellow, ConsoleOutputColor.NoChange));
-            logConsole.RowHighlightingRules.Add(new ConsoleRowHighlightingRule(ConditionParser.ParseExpression("level == LogLevel.Error"), ConsoleOutputColor.Red, ConsoleOutputColor.NoChange));
-            logConsole.RowHighlightingRules.Add(new ConsoleRowHighlightingRule(ConditionParser.ParseExpression("level == LogLevel.Fatal"), ConsoleOutputColor.DarkRed, ConsoleOutputColor.NoChange));
+            _logConsole.RowHighlightingRules.Add(new ConsoleRowHighlightingRule(ConditionParser.ParseExpression("level == LogLevel.Warn"), ConsoleOutputColor.Yellow, ConsoleOutputColor.NoChange));
+            _logConsole.RowHighlightingRules.Add(new ConsoleRowHighlightingRule(ConditionParser.ParseExpression("level == LogLevel.Error"), ConsoleOutputColor.Red, ConsoleOutputColor.NoChange));
+            _logConsole.RowHighlightingRules.Add(new ConsoleRowHighlightingRule(ConditionParser.ParseExpression("level == LogLevel.Fatal"), ConsoleOutputColor.DarkRed, ConsoleOutputColor.NoChange));
             
-            logConfig.AddRule(LogLevel.Trace, LogLevel.Fatal, logConsole);
-            logConfig.AddRule(LogLevel.Debug, LogLevel.Fatal, logFile);
+            logConfig.AddRule(LogLevel.Trace, LogLevel.Fatal, _logConsole);
+            logConfig.AddRule(LogLevel.Debug, LogLevel.Fatal, _logFile);
 
             LogManager.Configuration = logConfig;
             
-            engineLogger = LogManager.Setup().GetLogger("Dough");
-            appLogger = LogManager.Setup().GetLogger(appName);
+            _engineLogger = LogManager.Setup().GetLogger("Dough");
+            _appLogger = LogManager.Setup().GetLogger(appName);
             
             EngineInfo("Initialised log!");
         }
@@ -59,8 +59,8 @@ namespace Dough.Core
             if (!_logEnabled)
             {
                 // If log is disabled, just null loggers.
-                engineLogger = LogManager.CreateNullLogger();
-                appLogger = LogManager.CreateNullLogger();
+                _engineLogger = LogManager.CreateNullLogger();
+                _appLogger = LogManager.CreateNullLogger();
             }
         }
 
@@ -69,18 +69,18 @@ namespace Dough.Core
             LogManager.Shutdown();
         }
 
-        public static void Trace(string msg) => appLogger.Trace(msg);
-        public static void Info(string msg) => appLogger.Info(msg);
-        public static void Warn(string msg) => appLogger.Warn(msg);
-        public static void Error(string msg) => appLogger.Error(msg);
-        public static void Fatal(string msg) => appLogger.Fatal(msg);
-        public static void Fatal(Exception e, string msg) => appLogger.Fatal(e, msg);
+        public static void Trace(string msg) => _appLogger.Trace(msg);
+        public static void Info(string msg) => _appLogger.Info(msg);
+        public static void Warn(string msg) => _appLogger.Warn(msg);
+        public static void Error(string msg) => _appLogger.Error(msg);
+        public static void Fatal(string msg) => _appLogger.Fatal(msg);
+        public static void Fatal(Exception e, string msg) => _appLogger.Fatal(e, msg);
 
-        internal static void EngineTrace(string msg) => engineLogger.Trace(msg);
-        internal static void EngineInfo(string msg) => engineLogger.Info(msg);
-        internal static void EngineWarn(string msg) => engineLogger.Warn(msg);
-        internal static void EngineError(string msg) => engineLogger.Error(msg);
-        internal static void EngineFatal(string msg) => engineLogger.Fatal(msg);
-        internal static void EngineFatal(Exception e, string msg) => engineLogger.Fatal(e, msg);
+        internal static void EngineTrace(string msg) => _engineLogger.Trace(msg);
+        internal static void EngineInfo(string msg) => _engineLogger.Info(msg);
+        internal static void EngineWarn(string msg) => _engineLogger.Warn(msg);
+        internal static void EngineError(string msg) => _engineLogger.Error(msg);
+        internal static void EngineFatal(string msg) => _engineLogger.Fatal(msg);
+        internal static void EngineFatal(Exception e, string msg) => _engineLogger.Fatal(e, msg);
     }
 }
