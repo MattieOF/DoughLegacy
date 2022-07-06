@@ -51,11 +51,13 @@ namespace Dough.Core
         public static void Warn(string msg) => appLogger.Warn(msg);
         public static void Error(string msg) => appLogger.Error(msg);
         public static void Fatal(string msg) => appLogger.Fatal(msg);
-        
+        public static void Fatal(Exception e, string msg) => appLogger.Fatal(e, msg);
+
         internal static void EngineTrace(string msg) => engineLogger.Trace(msg);
         internal static void EngineInfo(string msg) => engineLogger.Info(msg);
         internal static void EngineWarn(string msg) => engineLogger.Warn(msg);
         internal static void EngineError(string msg) => engineLogger.Error(msg);
         internal static void EngineFatal(string msg) => engineLogger.Fatal(msg);
+        internal static void EngineFatal(Exception e, string msg) => engineLogger.Fatal(e, msg);
     }
 }
