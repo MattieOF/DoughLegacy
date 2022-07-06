@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog;
 
 namespace Dough.Core
 {
@@ -7,13 +8,14 @@ namespace Dough.Core
         public ApplicationSpecification Specification
         {
             get;
-            private set;
+            protected set;
         }
         
         public Application(ApplicationSpecification specification)
         {
             Specification = specification;
             Environment.CurrentDirectory = Specification.workingDirectory;
+            ConfigManager.InitConfig();
             Log.Init(Specification.appName);
         }
 
@@ -24,7 +26,7 @@ namespace Dough.Core
         
         public void Dispose()
         {
-            
+            Log.Shutdown();
         }
     }
 
