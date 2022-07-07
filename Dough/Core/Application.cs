@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 using System.Reflection;
 using Silk.NET.Input;
 using Silk.NET.Maths;
@@ -10,6 +11,7 @@ namespace Dough.Core
     {
         protected IWindow window;
         protected IInputContext input;
+        protected LayerStack layerStack;
 
         [ConfigValue("WindowSize", ConfigFiles.EngineVideo)]
         private static Vector2D<int> _windowSize = new Vector2D<int>(1280, 720);
@@ -23,7 +25,7 @@ namespace Dough.Core
         [ConfigValue("VSync", ConfigFiles.EngineVideo)]
         private static bool _vsync = true;
 
-        [ConfigValue("MaxFPS", ConfigFiles.EngineVideo, "If vsync is disabled, maximum frame rate to run at")]
+        [ConfigValue("MaxFPS", ConfigFiles.EngineVideo, "If vsync is disabled, maximum frame rate to run at. -1 is unlimited.")]
         private static int _maxFps = 120;
 
         // Window related utility properties 
@@ -85,9 +87,20 @@ namespace Dough.Core
                 Log.EngineFatal(e, "Failed to create window!");
                 throw;
             }
+            
+            window.Update += OnUpdate;
 
+            // Init input
             input = window.CreateInput();
             RefreshInputDevices();
+            
+            // Init layer stack
+            layerStack = new LayerStack(this);
+        }
+        private void OnUpdate(double deltaTime)
+        {
+            Log.EngineInfo("Begin layer update");
+            layerStack.UpdateLayers(deltaTime);
         }
 
         protected void RefreshInputDevices()
