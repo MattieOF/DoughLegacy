@@ -28,6 +28,12 @@ class ConfigValue : Attribute
     /// File to store the value in. <b>Include</b> the extension
     /// </summary>
     public string File { get; set; }
+    
+    /// <summary>
+    /// Comment to be written to the TOML. Useful for describing what a value does.
+    /// <para>Persists between sessions if edited by user.</para>
+    /// </summary>
+    public string Comment { get; set; }
 
     /// <summary>
     /// Default value to assign to the variable if its not found in the config file already
@@ -38,10 +44,11 @@ class ConfigValue : Attribute
     // This would cause problems with the Toml serialiser though, as it doesn't support null
     public object Default { get; set; }
 
-    public ConfigValue(string name, string file, object defaultValue = null)
+    public ConfigValue(string name, string file, string comment = null, object defaultValue = null)
     {
         Name = name;
         File = file;
+        Comment = comment;
         Default = defaultValue;
     }
 }
@@ -183,7 +190,11 @@ public class ConfigManager
                             if (info.GetValue(null) == null)
                                 info.SetValue(null, Activator.CreateInstance(info.FieldType));
                         }
-                        ConfigFiles[configValue.File].PutValue(configValue.Name, TomletMain.ValueFrom(info.FieldType, info.GetValue(null)));
+
+                        var val = TomletMain.ValueFrom(info.FieldType, info.GetValue(null));
+                        if (!string.IsNullOrEmpty(configValue.Comment))
+                            val.Comments.InlineComment = configValue.Comment;
+                        ConfigFiles[configValue.File].PutValue(configValue.Name, val);
                     }
 
                     CachedFields.Add(info);
@@ -226,7 +237,11 @@ public class ConfigManager
                             if (info.GetValue(null) == null)
                                 info.SetValue(null, Activator.CreateInstance(info.PropertyType));
                         }
-                        ConfigFiles[configValue.File].PutValue(configValue.Name, TomletMain.ValueFrom(info.PropertyType, info.GetValue(null)));
+                        
+                        var val = TomletMain.ValueFrom(info.PropertyType, info.GetValue(null));
+                        if (!string.IsNullOrEmpty(configValue.Comment))
+                            val.Comments.InlineComment = configValue.Comment;
+                        ConfigFiles[configValue.File].PutValue(configValue.Name, val);
                     }
 
                     CachedProperties.Add(info);

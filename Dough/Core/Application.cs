@@ -1,5 +1,6 @@
 ﻿using Silk.NET.Maths;
 using Silk.NET.Windowing;
+using Tomlet.Attributes;
 
 namespace Dough.Core
 {
@@ -13,13 +14,13 @@ namespace Dough.Core
         [ConfigValue("Fullscreen", ConfigFiles.EngineVideo)]
         private static bool _fullscreen = false;
 
-        [ConfigValue("BorderlessWindow", ConfigFiles.EngineVideo)]
+        [ConfigValue("BorderlessWindow", ConfigFiles.EngineVideo, "If using fullscreen, should a borderless window be used?")]
         private static bool _borderlessWindow = false;
 
-        [ConfigValue("Fullscreen", ConfigFiles.EngineVideo)]
+        [ConfigValue("VSync", ConfigFiles.EngineVideo)]
         private static bool _vsync = true;
 
-        [ConfigValue("MaxFPS", ConfigFiles.EngineVideo)]
+        [ConfigValue("MaxFPS", ConfigFiles.EngineVideo, "If vsync is disabled, maximum frame rate to run at")]
         private static int _maxFps = 120;
 
         // Window related utility properties 
