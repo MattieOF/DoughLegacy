@@ -129,7 +129,8 @@ public class ConfigManager
     /// not contain a value.
     /// </summary>
     /// <param name="configDir">Root directory of config files.</param>
-    public static void InitConfig(string configDir = "Config/")
+    /// <param name="assembly">Assembly to look for ConfigValues in. If null, the calling assembly.</param>
+    public static void InitConfig(string configDir = "Config/", Assembly assembly = null)
     {
         // Load all files under config file path into TomlDocuments (dictionary with file name as key and tomldoc as value)
         // Look for configvalues in the assembly that called this function
@@ -145,7 +146,8 @@ public class ConfigManager
         CachedFields.Clear();
         CachedProperties.Clear();
 
-        var types = Assembly.GetCallingAssembly().GetTypes();
+        assembly = (assembly ?? Assembly.GetCallingAssembly());
+        var types = assembly.GetTypes();
 
         foreach (var type in types)
         {
@@ -252,7 +254,7 @@ public class ConfigManager
         SaveConfigFiles();
 
         timer.Stop();
-        Log.EngineInfo($"Took {timer.ElapsedMilliseconds}ms to load config");
+        Log.EngineInfo($"Took {timer.ElapsedMilliseconds}ms to load config in {assembly.GetName().Name}");
     }
 
     /// <summary>

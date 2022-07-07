@@ -40,7 +40,14 @@ namespace Dough.Core
             Specification = specification;
             Environment.CurrentDirectory = Specification.workingDirectory;
             Log.Init(Specification.appName);
-            ConfigManager.InitConfig();
+            
+            // Init config
+            ConfigManager.InitConfig(); // Init engine config
+            // Caller for this function should be the clients override of Application
+            var caller = Assembly.GetCallingAssembly();
+            if (Assembly.GetExecutingAssembly() != caller) // Init config of app
+                ConfigManager.InitConfig(assembly: caller);
+            
             Log.Configure();
 
             WindowOptions windowOptions = WindowOptions.Default;
@@ -62,6 +69,8 @@ namespace Dough.Core
                 Log.EngineFatal(e, "Failed to create window!");
                 throw;
             }
+            
+            
         }
 
         public bool Run()
