@@ -15,10 +15,12 @@ public class LayerStack : IDisposable
     {
         layer.SetApplication(_application);
         _layers.Insert(_layers.Count - _overlayCount, layer);
+        layer.OnAttach();
     }
 
     public void PopLayer(Layer layer)
     {
+        layer.OnDetach();
         _layers.Remove(layer);
     }
 
@@ -27,10 +29,12 @@ public class LayerStack : IDisposable
         layer.SetApplication(_application);
         _layers.Add(layer);
         _overlayCount++;
+        layer.OnAttach();
     }
 
     public void PopOverlay(Layer layer)
     {
+        layer.OnDetach();
         _layers.Remove(layer);
         _overlayCount--;
     }
