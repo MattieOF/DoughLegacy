@@ -1,10 +1,5 @@
-﻿#nullable enable
-using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using Tomlet;
 using Tomlet.Models;
 
@@ -41,9 +36,9 @@ class ConfigValue : Attribute
     /// </summary>
     // Todo: Add the ability to disable the Activator.CreateInstance behaviour
     // This would cause problems with the Toml serialiser though, as it doesn't support null
-    public object? Default { get; set; }
+    public object Default { get; set; }
 
-    public ConfigValue(string name, string file, object? defaultValue = null)
+    public ConfigValue(string name, string file, object defaultValue = null)
     {
         Name = name;
         File = file;
@@ -56,7 +51,7 @@ public class ConfigManager
     // Todo: Integrate with logging, include delegates for giving custom log functions
     // Todo: Add support for backups - copy all the cfgs when we load them. Configurable backup history length.
 
-    public string? ConfigDirectory => _configDirectory;
+    public string ConfigDirectory => _configDirectory;
 
     /// <summary>
     /// File extensions that should be recognised as config files by <see cref="LoadConfigFiles"/>

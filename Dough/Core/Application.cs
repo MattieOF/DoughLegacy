@@ -1,5 +1,4 @@
-﻿using System;
-using Silk.NET.Maths;
+﻿using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
 namespace Dough.Core
@@ -46,10 +45,15 @@ namespace Dough.Core
             WindowOptions windowOptions = WindowOptions.Default;
             windowOptions.Title = Specification.appName;
             windowOptions.Size = _windowSize;
+            windowOptions.WindowBorder = Border;
+            windowOptions.WindowState = State;
+            windowOptions.FramesPerSecond = _maxFps;
+            windowOptions.VSync = _vsync;
 
             try
             {
                 window = Window.Create(windowOptions);
+                window.Initialize();
                 window.Center();
             }
             catch (Exception e)

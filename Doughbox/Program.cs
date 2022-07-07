@@ -1,5 +1,4 @@
-﻿using System;
-using Dough.Core;
+﻿using Dough.Core;
 
 namespace Doughbox
 {
